@@ -12,9 +12,6 @@
             background: black;
             color: white;
             overflow-x: hidden;
-            opacity: 0;
-            transform: scale(1.1);
-            transition: opacity 1s ease, transform 1s ease;
         }
         .moon {
             position: absolute;
@@ -34,33 +31,37 @@
             text-align: center;
             margin-top: 150px;
             font-size: 24px;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
         }
         .checkered {
-            position: fixed;
-            width: 80px;
-            height: 80px;
-            background: repeating-conic-gradient(
-                white 0deg 90deg,
-                black 90deg 180deg,
-                white 180deg 270deg,
-                black 270deg 360deg
-            );
-            background-size: 20px 20px;
+        position: fixed; /* Changed from absolute to fixed */
+        width: 80px;
+        height: 80px;
+        background: repeating-conic-gradient(
+            white 0deg 90deg,
+            black 90deg 180deg,
+            white 180deg 270deg,
+            black 270deg 360deg
+        );
+        background-size: 20px 20px;
+    }
+    .bottom-left {
+        bottom: 0; /* Adjusted to align with the viewport */
+        left: 0;
+        clip-path: polygon(0% 100%, 100% 100%, 0% 0%);
+    }
+    .top-right {
+        top: 0; /* Adjusted to align with the viewport */
+        right: 0;
+        clip-path: polygon(100% 0%, 100% 100%, 0% 0%);
+    }
+        .animate {
             opacity: 0;
-            transition: opacity 1s ease 0.5s;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
-        .bottom-left {
-            bottom: 0;
-            left: 0;
-            clip-path: polygon(0% 100%, 100% 100%, 0% 0%);
-        }
-        .top-right {
-            top: 0;
-            right: 0;
-            clip-path: polygon(100% 0%, 100% 100%, 0% 0%);
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         .marquee {
             white-space: nowrap;
@@ -94,7 +95,7 @@
     <div class="moon"></div>
     <div class="checkered bottom-left"></div>
     <div class="checkered top-right"></div>
-    <div class="content">Welcome to 2THEMOON!</div>
+    <div class="content animate">Welcome to 2THEMOON!</div>
     <div class="marquee">
         <span>GO 2THEMOON WITH YOUR WALLPAPERS • LOW PRICES, AND QUALITY WORK • AMAZING WALLPAPERS, CUSTOMIZED • DISCOVER THE ART OF WALLPAPERS WITH 2THEMOON • QUALITY YOU CAN TRUST</span>
     </div>
@@ -104,15 +105,11 @@
         <img src="https://via.placeholder.com/300" alt="Placeholder 3">
     </div>
     <script>
-        window.addEventListener("load", function() {
-            document.body.style.opacity = "1";
-            document.body.style.transform = "scale(1)";
-            document.querySelector(".moon").style.opacity = "1";
-            document.querySelector(".moon").style.transform = "translateX(-50%) scale(1)";
-            document.querySelector(".content").style.opacity = "1";
-            document.querySelector(".content").style.transform = "translateY(0)";
-            document.querySelectorAll(".checkered").forEach(el => {
-                el.style.opacity = "1";
+        document.addEventListener("scroll", function() {
+            document.querySelectorAll(".animate").forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    el.classList.add("visible");
+                }
             });
         });
         
